@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 //import '../providers/auth.dart';
 import '../providers/task.dart';
+import '../providers/auth.dart';
 import '../utilities/percent_based_on_days.dart';
 import '../utilities/percent_based_on_tasks.dart';
 
@@ -12,7 +13,7 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final task = Provider.of<Task>(context, listen: false);
-
+    final authData = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
       onTap: () {
         // Navigator.push(
@@ -79,7 +80,7 @@ class Item extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 10),
                       alignment: Alignment.centerLeft,
                       child: TaskTileText(
-                        text: task.startDate.day.toString(),
+                        text: 'Start Date: ${task.startDate.day.toString()}',
                         //color: textColor,
                       ),
                     ),
@@ -111,7 +112,7 @@ class Item extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 10),
                       alignment: Alignment.centerLeft,
                       child: TaskTileText(
-                        text: task.endDate.day.toString(),
+                        text: 'End Date: ${task.endDate.day.toString()}',
                         //color: textColor,
                       ),
                     ),
@@ -137,6 +138,19 @@ class Item extends StatelessWidget {
                       ),
                     ),
                   ),
+                  //Checkbox(value: task.isCompleted),
+                  Expanded(
+                      child: Consumer<Task>(
+                    builder: (ctx, task, _) => FlatButton(
+                        onPressed: () {
+                          task.toggleCompletedStatus(
+                              authData.token, authData.userId);
+                        },
+                        child: task.isCompleted
+                            ? Text('Mark Incomplete')
+                            : Text('Mark Complete')),
+                  ))
+
                   // Expanded(
                   //   child: Container(
                   //     padding: const EdgeInsets.only(left: 10),

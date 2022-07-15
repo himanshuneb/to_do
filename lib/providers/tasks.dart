@@ -47,16 +47,16 @@ class Tasks with ChangeNotifier {
       extractedData.forEach((tId, tData) {
         var completeStatus = false;
         if (completeData != null) {
-          //print('himanshuneb test 1');
+          print('himanshuneb test 1');
           if (completeData[tId] != null) {
-            //print('himanshuneb test 2');
-            if (completeData[tId]['isFavourite'] != null) {
-              //print('himanshuneb test 3');
-              completeStatus = completeData[tId]['isFavourite'];
+            print('himanshuneb test 2');
+            if (completeData[tId]['isCompleted'] != null) {
+              print('himanshuneb test 3');
+              completeStatus = completeData[tId]['isCompleted'];
             }
           }
         }
-        //print('himanshuneb $completeStatus');
+        print('himanshuneb $completeStatus');
 
         loadedTasks.add(Task(
           id: tId,
