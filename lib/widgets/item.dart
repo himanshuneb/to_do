@@ -15,6 +15,7 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final task = Provider.of<Task>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
@@ -81,40 +82,57 @@ class Item extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        alignment: Alignment.centerLeft,
-                        child: FlatButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(TScreen.routeName,
-                                arguments: {"TaskId": task.id});
-                          },
-                          child: Text('Task Screen'),
-                        )),
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(TScreen.routeName,
+                              arguments: {"TaskId": task.id});
+                        },
+                        child: Text('Task Screen'),
+                      ),
+                    ),
                   ),
                   //Checkbox(value: task.isCompleted),
                   Expanded(
-                      child: Consumer<Tasks>(
-                    builder: (ctx, tasks, _) => FlatButton(
-                        onPressed: () {
-                          tasks.toggleCompletedStatus(task.id);
-                          //Provider.of<Task>(context, listen: false).increment();
-                          //Provider.of<Tasks>(context, listen: false)
-                          //.fetchAndSetTasks();
-                        },
-                        child: task.isCompleted
-                            ? Text('Mark Incomplete')
-                            : Text('Mark Complete')),
-                  )),
-                  Expanded(
-                    child: Consumer<Task>(
-                      builder: (ctx, task, _) => FlatButton(
+                    child: Consumer<Tasks>(
+                      builder: (ctx, tasks, _) => FlatButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                EditTaskScreen.routeName,
-                                arguments: {"id": task.id});
+                            tasks.toggleCompletedStatus(task.id);
+                            //Provider.of<Task>(context, listen: false).increment();
+                            //Provider.of<Tasks>(context, listen: false)
+                            //.fetchAndSetTasks();
                           },
-                          child: Text('Edit')),
+                          child: task.isCompleted
+                              ? Text('Mark Incomplete')
+                              : Text('Mark Complete')),
                     ),
+                  ),
+                  Expanded(
+                    //child: Consumer<Task>(
+                    //builder: (ctx, no, _) => FlatButton(
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              EditTaskScreen.routeName,
+                              arguments: {"id": task.id});
+                        },
+                        child: Text('Edit')),
+                  ),
+                  //),
+                  Expanded(
+                    child: FlatButton(
+                        onPressed: () async {
+                          try {
+                            await Provider.of<Tasks>(context, listen: false)
+                                .deleteTask(task.id);
+                          } catch (error) {
+                            scaffold.showSnackBar(SnackBar(
+                                content: Text(
+                              'Deleting failed!',
+                              textAlign: TextAlign.center,
+                            )));
+                          }
+                        },
+                        child: Text('Delete')),
                   ),
                 ],
               ),

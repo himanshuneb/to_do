@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do/screens/edit_subtask_screen.dart';
 
 import '../screens/task_screen.dart';
 
@@ -18,6 +19,7 @@ class SubItem extends StatelessWidget {
   SubItem(this.parentId);
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final task = Provider.of<Subtask>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
@@ -49,14 +51,6 @@ class SubItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Expanded(
-            //   child: CircularProgressIndicator(
-            //     backgroundColor: Colors.white,
-            //     color: Colors.purple.withAlpha(100),
-            //     strokeWidth: 2,
-            //     value: percentDays(task.date, task.end),
-            //   ),
-            // ),
             Expanded(
               flex: 3,
               child: Column(
@@ -71,197 +65,53 @@ class SubItem extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         )),
                   ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: "Start date:".toString(),
-                  //       color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: 'Start Date: ${task.startDate.day.toString()}',
-                  //       //color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: "End date:".toString(),
-                  //       color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: CircularProgressIndicator(
-                  //       backgroundColor: Colors.white,
-                  //       color: Colors.purple.withAlpha(100),
-                  //       strokeWidth: 5,
-                  //       value: 0.5, //
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: 'End Date: ${task.endDate.day.toString()}',
-                  //       //color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: "Percent based on days:".toString(),
-                  //       color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: percentDays(task.startDate, task.endDate)
-                  //           .toString(),
-                  //       //color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
-                  //Checkbox(value: task.isCompleted),
                   Expanded(
                       child: Consumer<Subtasks>(
                     builder: (ctx, tasks, _) => FlatButton(
                         onPressed: () {
                           tasks.toggleCompletedStatus(task.id, parentId);
-                          //Provider.of<Task>(context, listen: false).increment();
-                          //Provider.of<Tasks>(context, listen: false)
-                          //.fetchAndSetTasks();
                         },
                         child: task.isCompleted
                             ? Text('Mark Incomplete')
                             : Text('Mark Complete')),
                   )),
-                  // Expanded(
-                  //     child: Consumer<Task>(
-                  //         builder: (ctx, task, _) => FlatButton(
-                  //               onPressed: () {
-                  //                 Navigator.of(context).pushNamed(
-                  //                     TScreen.routeName,
-                  //                     arguments: {"TaskId": task.id});
-                  //               },
-                  //               child: Text('Task Screen'),
-                  //             ))),
-                  // Expanded(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.only(left: 10),
-                  //     alignment: Alignment.centerLeft,
-                  //     child: TaskTileText(
-                  //       text: percentTasks(
-                  //               task.checkedSubtasks, task.totalSubtasks)
-                  //           .toString(),
-                  //       color: textColor,
-                  //     ),
-                  //   ),
-                  // ),
+                  Expanded(
+                    //child: Consumer<Task>(
+                    //builder: (ctx, no, _) => FlatButton(
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              EditSubtaskScreen.routeName,
+                              arguments: {"id": task.id, "TaskId": parentId});
+                        },
+                        child: Text('Edit')),
+                  ),
+                  //),
+                  Expanded(
+                    child: FlatButton(
+                        onPressed: () async {
+                          try {
+                            await Provider.of<Subtasks>(context, listen: false)
+                                .deleteSubtask(task.id, parentId);
+                          } catch (error) {
+                            scaffold.showSnackBar(SnackBar(
+                                content: Text(
+                              'Deleting failed!',
+                              textAlign: TextAlign.center,
+                            )));
+                          }
+                        },
+                        child: Text('Delete')),
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-      // actions: !task.isCompleted
-      //     ? [
-      //         TaskTileActions(
-      //           color: Colors.lightGreen,
-      //           icon: task.isCompleted
-      //               ? Icons.remove_done_rounded
-      //               : Icons.checklist_rtl_sharp,
-      //           onTap: () {
-      //             task.isCompleted = true;
-      //             updateTask(task);
-      //           },
-      //         ),
-      //         TaskTileActions(
-      //           color: Colors.lightBlue.shade100,
-      //           icon: task.isStarred ? Icons.star : Icons.star_border,
-      //           onTap: () {
-      //             task.isStarred = !task.isStarred;
-      //             updateTask(task);
-      //           },
-      //         ),
-      //       ]
-      //     : [],
-      // secondaryActions: [
-      //   TaskTileActions(
-      //     color: Colors.red,
-      //     icon: Icons.delete,
-      //     onTap: () {
-      //       if (task.id == null) {
-      //       } else {
-      //         deleteTask(task.id!);
-      //       }
-      //     },
-      //   ),
-      // ],
-      //),
     );
   }
 }
-
-// class TaskTileActions extends StatelessWidget {
-//   const TaskTileActions({
-//     Key? key,
-//     required this.color,
-//     required this.icon,
-//     required this.onTap,
-//   }) : super(key: key);
-
-//   final Color color;
-//   final IconData icon;
-//   final Function() onTap;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       child: Container(
-//         alignment: Alignment.center,
-//         margin: const EdgeInsets.all(10),
-//         decoration: BoxDecoration(
-//           color: color,
-//           boxShadow: [
-//             BoxShadow(
-//               blurRadius: 2,
-//               color: Colors.grey.shade500,
-//             ),
-//           ],
-//           borderRadius: const BorderRadius.all(Radius.circular(10)),
-//         ),
-//         child: Icon(
-//           icon,
-//           color: backgroundColor,
-//         ),
-//       ),
-//       onTap: onTap,
-//     );
-//   }
-// }
 
 class TaskTileText extends StatelessWidget {
   const TaskTileText(
