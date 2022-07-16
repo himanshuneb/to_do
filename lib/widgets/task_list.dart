@@ -4,14 +4,21 @@ import 'package:provider/provider.dart';
 import '/providers/tasks.dart';
 import '/widgets/item.dart';
 
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
   //const TaskList({ Key? key }) : super(key: key);
   final bool showIncomplete;
   TaskList(this.showIncomplete);
+
+  @override
+  State<TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     final taskData = Provider.of<Tasks>(context);
-    final tasks = showIncomplete ? taskData.incompleteItems : taskData.items;
+    final tasks =
+        widget.showIncomplete ? taskData.incompleteItems : taskData.items;
     return ListView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: tasks.length,

@@ -28,40 +28,23 @@ class Subtasks with ChangeNotifier {
 
   Future<void> fetchAndSetSubtasks(String parentId) async {
     var url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/subtasks/$parentId.json?auth=$authToken');
+        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$parentId/subtasks.json?auth=$authToken');
 
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
+      _items = [];
+      notifyListeners();
       return;
     }
-    url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/userCompleted/$userId/subtasks.json?auth=$authToken');
-    final completeResponse = await http.get(url);
-    final completeData =
-        json.decode(completeResponse.body) as Map<String, dynamic>;
-    print('himanshuneb $completeData');
 
     final List<Subtask> loadedTasks = [];
     //prodId, prodData <=> key, value
     extractedData.forEach((tId, tData) {
-      var completeStatus = false;
-      if (completeData != null) {
-        print('himanshuneb test 1');
-        if (completeData[tId] != null) {
-          print('himanshuneb test 2');
-          if (completeData[tId]['isCompleted'] != null) {
-            print('himanshuneb test 3');
-            completeStatus = completeData[tId]['isCompleted'];
-          }
-        }
-      }
-      print('himanshuneb $completeStatus');
-
       loadedTasks.add(Subtask(
         id: tId,
         title: tData['title'].toString(),
-        isCompleted: completeStatus,
+        isCompleted: tData['isCompleted'] == true,
       ));
     });
     _items = loadedTasks;
@@ -70,7 +53,7 @@ class Subtasks with ChangeNotifier {
 
   Future<void> addSubtask(Subtask task, String parentId) async {
     final url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/subtasks/$parentId.json?auth=$authToken');
+        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$parentId/subtasks.json?auth=$authToken');
     //add try block around the code which might fail
     try {
       final response = await http.post(
@@ -78,12 +61,14 @@ class Subtasks with ChangeNotifier {
         body: json.encode({
           'title': task.title,
           'creatorId': userId,
+          'isCompleted': task.isCompleted,
         }),
       );
       //then
       final newTask = Subtask(
         title: task.title,
         id: json.decode(response.body)['name'],
+        isCompleted: false,
       );
       _items.add(newTask);
       // _items.insert(0, newProduct); // at the start of the list
@@ -99,10 +84,11 @@ class Subtasks with ChangeNotifier {
     final tIndex = _items.indexWhere((t) => t.id == id);
     if (tIndex >= 0) {
       final url = Uri.parse(
-          'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/subtasks/$parentId/$id.json?auth=$authToken');
+          'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$parentId/subtasks/$id.json?auth=$authToken');
       await http.patch(url,
           body: json.encode({
             'title': newTask.title,
+            'isCompleted': newTask.isCompleted,
           }));
       _items[tIndex] = newTask;
       notifyListeners();
@@ -113,7 +99,7 @@ class Subtasks with ChangeNotifier {
 
   Future<void> deleteSubtask(String id, String parentId) async {
     final url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/subtasks/$parentId/$id.json?auth=$authToken');
+        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$parentId/subtasks/$id.json?auth=$authToken');
     final existingTaskIndex = _items.indexWhere((t) => t.id == id);
     //removes from the list but still keeps the item in memory, helps in rollback if error
     var existingTask = _items[existingTaskIndex];
@@ -129,5 +115,33 @@ class Subtasks with ChangeNotifier {
       throw HttpException('Could not delete task.');
     }
     existingTask = null;
+  }
+
+  void _setCompleted(Subtask tsk, bool newValue) {
+    tsk.isCompleted = newValue;
+    notifyListeners();
+  }
+
+  Future<void> toggleCompletedStatus(String id, String parentId) async {
+    final taskIndex = _items.indexWhere((t) => t.id == id);
+    var tsk = _items[taskIndex];
+    final oldStatus = tsk.isCompleted;
+    tsk.isCompleted = !tsk.isCompleted;
+    notifyListeners();
+    final url = Uri.parse(
+        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$parentId/subtasks/$id.json?auth=$authToken');
+    try {
+      final response = await http.patch(
+        url,
+        body: json.encode({
+          'isCompleted': tsk.isCompleted,
+        }),
+      );
+      if (response.statusCode >= 400) {
+        _setCompleted(tsk, oldStatus);
+      }
+    } catch (error) {
+      _setCompleted(tsk, oldStatus);
+    }
   }
 }

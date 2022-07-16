@@ -22,29 +22,4 @@ class Subtask with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void _setCompleted(bool newValue) {
-    isCompleted = newValue;
-    notifyListeners();
-  }
-
-  Future<void> toggleCompletedStatus(String authToken, String userId) async {
-    final oldStatus = isCompleted;
-    isCompleted = !isCompleted;
-    notifyListeners();
-    final url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/userCompleted/$userId/subtasks/$id.json?auth=$authToken');
-    try {
-      final response = await http.patch(
-        url,
-        body: json.encode({
-          'isCompleted': isCompleted,
-        }),
-      );
-      if (response.statusCode >= 400) {
-        _setCompleted(oldStatus);
-      }
-    } catch (error) {
-      _setCompleted(oldStatus);
-    }
-  }
 }

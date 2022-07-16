@@ -98,7 +98,7 @@ class _TScreenState extends State<TScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SubtaskList(_showOnlyIncomplete),
+          : SubtaskList(_showOnlyIncomplete, parentId),
     );
   }
 }

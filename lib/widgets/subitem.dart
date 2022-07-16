@@ -14,7 +14,8 @@ import '../utilities/percent_based_on_tasks.dart';
 
 class SubItem extends StatelessWidget {
   //const Item({ Key? key }) : super(key: key);
-
+  final String parentId;
+  SubItem(this.parentId);
   @override
   Widget build(BuildContext context) {
     final task = Provider.of<Subtask>(context, listen: false);
@@ -145,11 +146,10 @@ class SubItem extends StatelessWidget {
                   // ),
                   //Checkbox(value: task.isCompleted),
                   Expanded(
-                      child: Consumer<Subtask>(
-                    builder: (ctx, task, _) => FlatButton(
+                      child: Consumer<Subtasks>(
+                    builder: (ctx, tasks, _) => FlatButton(
                         onPressed: () {
-                          task.toggleCompletedStatus(
-                              authData.token, authData.userId);
+                          tasks.toggleCompletedStatus(task.id, parentId);
                           //Provider.of<Task>(context, listen: false).increment();
                           //Provider.of<Tasks>(context, listen: false)
                           //.fetchAndSetTasks();

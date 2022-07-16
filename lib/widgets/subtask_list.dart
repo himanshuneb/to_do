@@ -7,7 +7,8 @@ import '/widgets/subitem.dart';
 class SubtaskList extends StatelessWidget {
   //const TaskList({ Key? key }) : super(key: key);
   final bool showIncomplete;
-  SubtaskList(this.showIncomplete);
+  final String parentId;
+  SubtaskList(this.showIncomplete, this.parentId);
   @override
   Widget build(BuildContext context) {
     final taskData = Provider.of<Subtasks>(context);
@@ -17,7 +18,7 @@ class SubtaskList extends StatelessWidget {
       itemCount: tasks.length,
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: tasks[i],
-        child: SubItem(),
+        child: SubItem(parentId),
       ),
     );
   }
