@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:to_do/providers/subtask.dart';
 
 import './task.dart';
 import '../models/http_exception.dart';
@@ -19,11 +20,11 @@ class Tasks with ChangeNotifier {
   }
 
   List<Task> get incompleteItems {
-    return _items.where((prodItem) => !prodItem.isCompleted).toList();
+    return _items.where((tItem) => !tItem.isCompleted).toList();
   }
 
   Task findById(String id) {
-    return _items.firstWhere((prod) => prod.id == id);
+    return _items.firstWhere((t) => t.id == id);
   }
 
   Future<void> fetchAndSetTasks() async {
@@ -122,7 +123,7 @@ class Tasks with ChangeNotifier {
     }
   }
 
-  Future<void> deleteProduct(String id) async {
+  Future<void> deleteTask(String id) async {
     final url = Uri.parse(
         'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/tasks/$id.json?auth=$authToken');
     final existingTaskIndex = _items.indexWhere((t) => t.id == id);

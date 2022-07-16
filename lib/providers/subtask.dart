@@ -3,37 +3,36 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/http_exception.dart';
-
-import 'package:provider/provider.dart';
-import '/providers/subtask.dart';
-
-class Task with ChangeNotifier {
+class Subtask with ChangeNotifier {
   final String id;
   final String title;
-  final DateTime startDate;
-  final DateTime endDate;
   bool isCompleted;
+  //String parent;
 
-  Task({
+  Subtask({
     @required this.id,
     @required this.title,
-    @required this.startDate,
-    @required this.endDate,
     this.isCompleted = false,
+    //this.parent = '',
   });
+
+  // void setParent(String p) {
+  //   //print('new parent set...');
+  //   parent = p;
+  //   notifyListeners();
+  // }
 
   void _setCompleted(bool newValue) {
     isCompleted = newValue;
     notifyListeners();
   }
 
-  Future<void> toggleCompletedStatus(String token, String userId) async {
+  Future<void> toggleCompletedStatus(String authToken, String userId) async {
     final oldStatus = isCompleted;
     isCompleted = !isCompleted;
     notifyListeners();
     final url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/userCompleted/$userId/tasks/$id.json?auth=$token');
+        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/userCompleted/$userId/subtasks/$id.json?auth=$authToken');
     try {
       final response = await http.patch(
         url,

@@ -5,16 +5,19 @@ import '../screens/task_screen.dart';
 
 import '../providers/task.dart';
 import '../providers/tasks.dart';
+import '../providers/subtask.dart';
+import '../providers/subtasks.dart';
+
 import '../providers/auth.dart';
 import '../utilities/percent_based_on_days.dart';
 import '../utilities/percent_based_on_tasks.dart';
 
-class Item extends StatelessWidget {
+class SubItem extends StatelessWidget {
   //const Item({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final task = Provider.of<Task>(context, listen: false);
+    final task = Provider.of<Subtask>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
       onTap: () {
@@ -77,16 +80,16 @@ class Item extends StatelessWidget {
                   //     ),
                   //   ),
                   // ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      alignment: Alignment.centerLeft,
-                      child: TaskTileText(
-                        text: 'Start Date: ${task.startDate.day.toString()}',
-                        //color: textColor,
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Container(
+                  //     padding: const EdgeInsets.only(left: 10),
+                  //     alignment: Alignment.centerLeft,
+                  //     child: TaskTileText(
+                  //       text: 'Start Date: ${task.startDate.day.toString()}',
+                  //       //color: textColor,
+                  //     ),
+                  //   ),
+                  // ),
                   // Expanded(
                   //   child: Container(
                   //     padding: const EdgeInsets.only(left: 10),
@@ -109,16 +112,16 @@ class Item extends StatelessWidget {
                   //     ),
                   //   ),
                   // ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      alignment: Alignment.centerLeft,
-                      child: TaskTileText(
-                        text: 'End Date: ${task.endDate.day.toString()}',
-                        //color: textColor,
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Container(
+                  //     padding: const EdgeInsets.only(left: 10),
+                  //     alignment: Alignment.centerLeft,
+                  //     child: TaskTileText(
+                  //       text: 'End Date: ${task.endDate.day.toString()}',
+                  //       //color: textColor,
+                  //     ),
+                  //   ),
+                  // ),
                   // Expanded(
                   //   child: Container(
                   //     padding: const EdgeInsets.only(left: 10),
@@ -129,20 +132,20 @@ class Item extends StatelessWidget {
                   //     ),
                   //   ),
                   // ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      alignment: Alignment.centerLeft,
-                      child: TaskTileText(
-                        text: percentDays(task.startDate, task.endDate)
-                            .toString(),
-                        //color: textColor,
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Container(
+                  //     padding: const EdgeInsets.only(left: 10),
+                  //     alignment: Alignment.centerLeft,
+                  //     child: TaskTileText(
+                  //       text: percentDays(task.startDate, task.endDate)
+                  //           .toString(),
+                  //       //color: textColor,
+                  //     ),
+                  //   ),
+                  // ),
                   //Checkbox(value: task.isCompleted),
                   Expanded(
-                      child: Consumer<Task>(
+                      child: Consumer<Subtask>(
                     builder: (ctx, task, _) => FlatButton(
                         onPressed: () {
                           task.toggleCompletedStatus(
@@ -155,16 +158,16 @@ class Item extends StatelessWidget {
                             ? Text('Mark Incomplete')
                             : Text('Mark Complete')),
                   )),
-                  Expanded(
-                      child: Consumer<Task>(
-                          builder: (ctx, task, _) => FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      TScreen.routeName,
-                                      arguments: {"TaskId": task.id});
-                                },
-                                child: Text('Task Screen'),
-                              ))),
+                  // Expanded(
+                  //     child: Consumer<Task>(
+                  //         builder: (ctx, task, _) => FlatButton(
+                  //               onPressed: () {
+                  //                 Navigator.of(context).pushNamed(
+                  //                     TScreen.routeName,
+                  //                     arguments: {"TaskId": task.id});
+                  //               },
+                  //               child: Text('Task Screen'),
+                  //             ))),
                   // Expanded(
                   //   child: Container(
                   //     padding: const EdgeInsets.only(left: 10),

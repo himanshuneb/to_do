@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/providers/subtask.dart';
+import '/providers/subtasks.dart';
 import '/providers/task.dart';
 import '/providers/tasks.dart';
 
-class EditTaskScreen extends StatefulWidget {
+class EditSubtaskScreen extends StatefulWidget {
   //const EditTaskScreen({ Key? key }) : super(key: key);
-  static const routeName = '/edit-task';
+  static const routeName = '/edit-subtask';
   @override
-  State<EditTaskScreen> createState() => _EditTaskScreenState();
+  State<EditSubtaskScreen> createState() => _EditSubtaskScreenState();
 }
 
-class _EditTaskScreenState extends State<EditTaskScreen> {
+class _EditSubtaskScreenState extends State<EditSubtaskScreen> {
+  String parentId;
   final _form = GlobalKey<FormState>();
-  var _editedTask = Task(
+  var _editedTask = Subtask(
     id: null,
     title: '',
-    startDate: null,
-    endDate: null,
   );
   var _initValues = {
     'title': '',
-    'start': DateTime.now(),
-    'end': DateTime.now(),
   };
   var _isInit = true;
   var _isLoading = false;
@@ -32,19 +31,20 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     if (_isInit) {
       final temp = ModalRoute.of(context).settings.arguments as Map;
       //print(ModalRoute.of(context).settings.arguments);
+      //this is actually for subtask
       var taskId;
       if (temp != null) {
         taskId = temp["id"];
       } else {
         taskId = null;
       }
+      parentId = temp['TaskId'].toString();
+
       if (taskId != null) {
         _editedTask =
-            Provider.of<Tasks>(context, listen: false).findById(taskId);
+            Provider.of<Subtasks>(context, listen: false).findById(taskId);
         _initValues = {
           'title': _editedTask.title,
-          'start': _editedTask.startDate.toIso8601String(),
-          'price': _editedTask.endDate.toIso8601String(),
         };
       }
     }
@@ -63,6 +63,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   }
 
   Future<void> _saveForm() async {
+    //final temp = ModalRoute.of(context).settings.arguments as Map;
+
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -74,11 +76,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     });
 
     if (_editedTask.id != null) {
-      await Provider.of<Tasks>(context, listen: false)
-          .updateTask(_editedTask.id, _editedTask);
+      await Provider.of<Subtasks>(context, listen: false)
+          .updateSubask(_editedTask.id, _editedTask, parentId);
     } else {
       try {
-        await Provider.of<Tasks>(context, listen: false).addTask(_editedTask);
+        await Provider.of<Subtasks>(context, listen: false)
+            .addSubtask(_editedTask, parentId);
       } catch (error) {
         await showDialog<Null>(
           context: context,
@@ -104,9 +107,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //final temp = ModalRoute.of(context).settings.arguments as Map;
+    //parentId = temp['TaskId'].toString();
+    print('parentId: $parentId');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Task'),
+        title: Text('Edit Subtask'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -138,10 +144,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         return null;
                       },
                       onSaved: (value) {
-                        _editedTask = Task(
+                        _editedTask = Subtask(
                             title: value,
-                            startDate: DateTime.now(),
-                            endDate: DateTime.now().add(Duration(days: 5)),
                             id: _editedTask.id,
                             isCompleted: _editedTask.isCompleted);
                       },

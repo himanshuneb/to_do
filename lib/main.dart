@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do/providers/subtasks.dart';
+import 'package:to_do/providers/task.dart';
 
 import './providers/auth.dart';
 import './providers/tasks.dart';
+//import './providers/subtaskset.dart';
 
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/home_screen.dart';
 import './screens/edit_task_screen.dart';
+import './screens/edit_subtask_screen.dart';
+import './screens/task_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +28,11 @@ class MyApp extends StatelessWidget {
             create: (ctx) => Tasks('', '', []),
             update: (ctx, auth, previousTasks) => Tasks(auth.token, auth.userId,
                 previousTasks == null ? [] : previousTasks.items),
+          ),
+          ChangeNotifierProxyProvider<Auth, Subtasks>(
+            create: (ctx) => Subtasks('', '', []),
+            update: (ctx, auth, previousTasks) => Subtasks(auth.token,
+                auth.userId, previousTasks == null ? [] : previousTasks.items),
           ),
         ],
         // this ensures that the MaterialApp is rebuilt whenever Auth changes
@@ -50,6 +60,8 @@ class MyApp extends StatelessWidget {
                 // OrdersScreen.routeName: (ctx) => OrdersScreen(),
                 // UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
                 EditTaskScreen.routeName: (ctx) => EditTaskScreen(),
+                EditSubtaskScreen.routeName: (ctx) => EditSubtaskScreen(),
+                TScreen.routeName: (ctx) => TScreen(),
               }),
         ));
   }
