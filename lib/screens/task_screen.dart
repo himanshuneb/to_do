@@ -67,30 +67,6 @@ class _TScreenState extends State<TScreen> {
                 Navigator.of(context).pushNamed(EditSubtaskScreen.routeName,
                     arguments: {"id": null, "TaskId": parentId});
               }),
-          //     PopupMenuButton(
-          //       onSelected: (FilterOptions selectedValue) {
-          //         setState(() {
-          //           if (selectedValue == FilterOptions.Incomplete) {
-          //             _showOnlyIncomplete = true;
-          //           } else {
-          //             _showOnlyIncomplete = false;
-          //           }
-          //         });
-          //       },
-          //       icon: Icon(
-          //         Icons.more_vert,
-          //       ),
-          //       itemBuilder: (_) => [
-          //         PopupMenuItem(
-          //           child: Text('Show incomplete'),
-          //           value: FilterOptions.Incomplete,
-          //         ),
-          //         PopupMenuItem(
-          //           child: Text('Show All'),
-          //           value: FilterOptions.All,
-          //         ),
-          //       ],
-          //     ),
         ],
       ),
       // //drawer: AppDrawer(),

@@ -82,6 +82,18 @@ class Item extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      alignment: Alignment.centerLeft,
+                      child: TaskTileText(
+                        text: Provider.of<Task>(context, listen: false)
+                            .getTotal(authData.userId, authData.token, task.id)
+                            .toString(),
+                        //color: textColor,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
                       child: FlatButton(
                         onPressed: () {
                           Navigator.of(context).pushNamed(TScreen.routeName,

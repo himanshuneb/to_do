@@ -100,6 +100,10 @@ class SubItem extends StatelessWidget {
                               textAlign: TextAlign.center,
                             )));
                           }
+                          // Provider.of<Tasks>(context, listen: false)
+                          //     .decTotal(parentId);
+                          // Provider.of<Tasks>(context, listen: false)
+                          //     .decCompleted(parentId);
                         },
                         child: Text('Delete')),
                   ),
