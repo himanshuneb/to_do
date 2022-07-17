@@ -12,13 +12,17 @@ class SubtaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskData = Provider.of<Subtasks>(context);
-    final tasks = showIncomplete ? taskData.incompleteItems : taskData.items;
-    return ListView.builder(
-      padding: const EdgeInsets.all(10.0),
-      itemCount: tasks.length,
-      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-        value: tasks[i],
-        child: SubItem(parentId),
+    //final tasks = showIncomplete ? taskData.incompleteItems : taskData.items;
+    final tasks = taskData.items;
+    return SizedBox(
+      height: 600,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(10.0),
+        itemCount: tasks.length,
+        itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+          value: tasks[i],
+          child: SubItem(parentId),
+        ),
       ),
     );
   }

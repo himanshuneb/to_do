@@ -5,7 +5,7 @@ import '../providers/subtasks.dart';
 import '../widgets/subtask_list.dart';
 
 import '/screens/edit_subtask_screen.dart';
-
+import '../utilities/percent_based_on_tasks.dart';
 import 'package:to_do/widgets/task_list.dart';
 
 class TScreen extends StatefulWidget {
@@ -20,6 +20,8 @@ class _TScreenState extends State<TScreen> {
   var _showOnlyIncomplete = false;
   var _isInit = true;
   var _isLoading = false;
+  double pDays;
+  double pTasks;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _TScreenState extends State<TScreen> {
     if (_isInit) {
       final temp = ModalRoute.of(context)?.settings.arguments as Map;
       parentId = temp['TaskId'].toString();
+      pDays = double.parse(temp['percentDays']);
       setState(() {
         _isLoading = true;
       });
@@ -49,6 +52,10 @@ class _TScreenState extends State<TScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final taskData = Provider.of<Subtasks>(context);
+    final total = taskData.tSubtasks;
+    final completed = taskData.cSubtasks;
+    pTasks = percentTasks(completed, total);
     return Scaffold(
       appBar: AppBar(
         title: Text('Subtasks'),
@@ -74,7 +81,15 @@ class _TScreenState extends State<TScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SubtaskList(_showOnlyIncomplete, parentId),
+          : Column(
+              children: [
+                Text('PercentDays: ${pDays.toString()}'),
+                Text(total.toString()),
+                Text(completed.toString()),
+                Text('Percent Tasks: ${pTasks.toString()}'),
+                SubtaskList(_showOnlyIncomplete, parentId),
+              ],
+            ),
     );
   }
 }

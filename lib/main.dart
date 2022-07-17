@@ -28,9 +28,13 @@ class MyApp extends StatelessWidget {
                 previousTasks == null ? [] : previousTasks.items),
           ),
           ChangeNotifierProxyProvider<Auth, Subtasks>(
-            create: (ctx) => Subtasks('', '', []),
-            update: (ctx, auth, previousTasks) => Subtasks(auth.token,
-                auth.userId, previousTasks == null ? [] : previousTasks.items),
+            create: (ctx) => Subtasks('', '', [], 0, 0),
+            update: (ctx, auth, previousTasks) => Subtasks(
+                auth.token,
+                auth.userId,
+                previousTasks == null ? [] : previousTasks.items,
+                previousTasks.tSubtasks,
+                previousTasks.cSubtasks),
           ),
         ],
         // this ensures that the MaterialApp is rebuilt whenever Auth changes

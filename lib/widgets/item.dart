@@ -17,6 +17,7 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
     final task = Provider.of<Task>(context, listen: false);
+    String days = percentDays(task.startDate, task.endDate).toString();
     final authData = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
       onTap: () {},
@@ -69,35 +70,37 @@ class Item extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      alignment: Alignment.centerLeft,
-                      child: TaskTileText(
-                        text: percentDays(task.startDate, task.endDate)
-                            .toString(),
-                        //color: textColor,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      alignment: Alignment.centerLeft,
-                      child: TaskTileText(
-                        text: Provider.of<Task>(context, listen: false)
-                            .getTotal(authData.userId, authData.token, task.id)
-                            .toString(),
-                        //color: textColor,
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Container(
+                  //     padding: const EdgeInsets.only(left: 10),
+                  //     alignment: Alignment.centerLeft,
+                  //     child: TaskTileText(
+                  //       text: days,
+                  //       //color: textColor,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Expanded(
+                  //   child: Container(
+                  //     padding: const EdgeInsets.only(left: 10),
+                  //     alignment: Alignment.centerLeft,
+                  //     child: TaskTileText(
+                  //       text: Provider.of<Task>(context, listen: false)
+                  //           .getTotal(authData.userId, authData.token, task.id)
+                  //           .toString(),
+                  //       //color: textColor,
+                  //     ),
+                  //   ),
+                  // ),
                   Expanded(
                     child: Container(
                       child: FlatButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(TScreen.routeName,
-                              arguments: {"TaskId": task.id});
+                          Navigator.of(context)
+                              .pushNamed(TScreen.routeName, arguments: {
+                            "TaskId": task.id,
+                            "percentDays": days,
+                          });
                         },
                         child: Text('Task Screen'),
                       ),
