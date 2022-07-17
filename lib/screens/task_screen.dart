@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +19,15 @@ class TScreen extends StatefulWidget {
 
 class _TScreenState extends State<TScreen> {
   String parentId;
+  String parentName;
+  double pDays;
+
+  double pTasks;
+
   var _showOnlyIncomplete = false;
+
   var _isInit = true;
   var _isLoading = false;
-  double pDays;
-  double pTasks;
 
   @override
   void initState() {
@@ -34,8 +40,13 @@ class _TScreenState extends State<TScreen> {
     //check if running for the first time
     if (_isInit) {
       final temp = ModalRoute.of(context)?.settings.arguments as Map;
-      parentId = temp['TaskId'].toString();
-      pDays = double.parse(temp['percentDays']);
+      var str = (temp['Task']);
+      Map<String, dynamic> decode = json.decode(str);
+
+      parentId = decode['taskId'].toString();
+      parentName = decode['title'].toString();
+      pDays = double.parse(decode['days']);
+
       setState(() {
         _isLoading = true;
       });
@@ -58,7 +69,7 @@ class _TScreenState extends State<TScreen> {
     pTasks = percentTasks(completed, total);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Subtasks'),
+        title: Text(parentName),
         actions: <Widget>[
           // IconButton(
           //   icon: const Icon(Icons.exit_to_app),
