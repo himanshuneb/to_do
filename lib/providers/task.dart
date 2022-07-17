@@ -14,8 +14,8 @@ class Task with ChangeNotifier {
   final DateTime startDate;
   final DateTime endDate;
   bool isCompleted;
-  int totalSubtasks;
-  int completedSubtasks;
+  // int totalSubtasks;
+  // int completedSubtasks;
 
   Task({
     @required this.id,
@@ -23,8 +23,8 @@ class Task with ChangeNotifier {
     @required this.startDate,
     @required this.endDate,
     this.isCompleted = false,
-    this.completedSubtasks = 0,
-    this.totalSubtasks = 0,
+    // this.completedSubtasks = 0,
+    // this.totalSubtasks = 0,
   });
 
   // Future<void> getTotal(String userId, String authToken, String taskId) async {

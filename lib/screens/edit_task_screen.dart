@@ -55,6 +55,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           'start': _editedTask.startDate.toIso8601String(),
           'price': _editedTask.endDate.toIso8601String(),
         };
+        date1 = _editedTask.startDate;
+        date2 = _editedTask.endDate;
       }
     }
     _isInit = false;
@@ -215,7 +217,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   onTap: () async {
                     DateTime newDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: date1,
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
                     );
@@ -264,7 +266,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   onTap: () async {
                     DateTime newDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: date2,
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
                     );

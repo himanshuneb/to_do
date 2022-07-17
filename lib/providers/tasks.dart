@@ -50,8 +50,8 @@ class Tasks with ChangeNotifier {
           startDate: DateTime.parse(tData['start']),
           endDate: DateTime.parse(tData['end']),
           isCompleted: tData['isCompleted'] == true,
-          totalSubtasks: tData['totalSubtasks'],
-          completedSubtasks: tData['completedSubtasks'],
+          // totalSubtasks: tData['totalSubtasks'],
+          // completedSubtasks: tData['completedSubtasks'],
         ));
       });
       _items = loadedTasks;
@@ -164,62 +164,4 @@ class Tasks with ChangeNotifier {
       _setCompleted(tsk, oldStatus);
     }
   }
-
-  // Future<void> incTotal(String id) async {
-  //   final taskIndex = _items.indexWhere((t) => t.id == id);
-  //   var tsk = _items[taskIndex];
-  //   tsk.totalSubtasks++;
-  //   notifyListeners();
-  //   final url = Uri.parse(
-  //       'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$id.json?auth=$authToken');
-  //   try {
-  //     final response = await http.patch(
-  //       url,
-  //       body: json.encode({
-  //         'isCompleted': tsk.isCompleted,
-  //       }),
-  //     );
-  //     if (response.statusCode >= 400) {
-  //       _setCompleted(tsk, oldStatus);
-  //     }
-  //   } catch (error) {
-  //     print("himanshuneb: error");
-  //   }
-  // }
-
-  Future<void> decTotal(String id) async {
-    final taskIndex = _items.indexWhere((t) => t.id == id);
-    var tsk = _items[taskIndex];
-    tsk.totalSubtasks--;
-    notifyListeners();
-    final url = Uri.parse(
-        'https://to-do-5abc5-default-rtdb.asia-southeast1.firebasedatabase.app/$userId/tasks/$id.json?auth=$authToken');
-    try {
-      final response = await http.patch(
-        url,
-        body: json.encode({
-          'isCompleted': tsk.totalSubtasks,
-        }),
-      );
-      if (response.statusCode >= 400) {
-        tsk.totalSubtasks++;
-      }
-    } catch (error) {
-      print("himanshuneb: error");
-    }
-  }
-
-  // void incCompleted(String id) {
-  //   final taskIndex = _items.indexWhere((t) => t.id == id);
-  //   var tsk = _items[taskIndex];
-  //   tsk.completedSubtasks++;
-  //   notifyListeners();
-  // }
-
-  // void decCompleted(String id) {
-  //   final taskIndex = _items.indexWhere((t) => t.id == id);
-  //   var tsk = _items[taskIndex];
-  //   tsk.completedSubtasks--;
-  //   notifyListeners();
-  // }
 }
