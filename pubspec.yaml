@@ -59,6 +59,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: Halenoir
+      fonts:
+        - asset: font/Halenoir-Bold.otf
+        - asset: font/Halenoir-ThinObl.otf
+        - asset: font/Halenoir-UltraLight.otf
+        - asset: font/HalenoirText-Regular.otf
+          style: italic
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

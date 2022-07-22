@@ -5,6 +5,7 @@ import 'package:to_do/providers/tasks.dart';
 import '/screens/edit_task_screen.dart';
 
 import '../providers/auth.dart';
+import '../componenets/theme.dart';
 
 import 'package:to_do/widgets/task_list.dart';
 
@@ -53,21 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks'),
+        iconTheme: const IconThemeData(color: colorAccent),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/');
-
-              Provider.of<Auth>(context, listen: false).logout();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(EditTaskScreen.routeName);
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.add),
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(EditTaskScreen.routeName);
+          //   },
+          // ),
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
               setState(() {
@@ -79,7 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
             icon: Icon(
-              Icons.more_vert,
+              Icons.view_array,
+              color: Colors.black,
             ),
             itemBuilder: (_) => [
               PopupMenuItem(
@@ -92,6 +89,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/');
+
+              Provider.of<Auth>(context, listen: false).logout();
+            },
+          ),
         ],
       ),
       //drawer: AppDrawer(),
@@ -100,7 +106,27 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             )
           //Text("Hello"),
-          : TaskList(_showOnlyIncomplete),
+          : Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "YOUR GOALS",
+                    style: CusTextStyle(colorPrimary, 38, FontWeight.bold),
+                  ),
+                  alignment: Alignment.topLeft,
+                ),
+                TaskList(_showOnlyIncomplete),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'bottomRightAddTaskButton',
+        onPressed: () {
+          Navigator.of(context).pushNamed(EditTaskScreen.routeName);
+        },
+        //backgroundColor: colorPrimary,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '/providers/tasks.dart';
 import '/widgets/item.dart';
+import '/widgets/taskcard.dart';
 
 class TaskList extends StatefulWidget {
   //const TaskList({ Key? key }) : super(key: key);
@@ -19,12 +20,15 @@ class _TaskListState extends State<TaskList> {
     final taskData = Provider.of<Tasks>(context);
     final tasks =
         widget.showIncomplete ? taskData.incompleteItems : taskData.items;
-    return ListView.builder(
-      padding: const EdgeInsets.all(10.0),
-      itemCount: tasks.length,
-      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-        value: tasks[i],
-        child: Item(),
+    return SizedBox(
+      height: 500,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(10.0),
+        itemCount: tasks.length,
+        itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+          value: tasks[i],
+          child: TaskCard(),
+        ),
       ),
     );
   }
