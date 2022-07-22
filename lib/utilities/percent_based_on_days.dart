@@ -8,7 +8,7 @@ double percentDays(DateTime s, DateTime e) {
   } else {
     double totalBetweenEndAndStart = e.difference(s).inDays.toDouble();
     double daysSinceStart = t.difference(s).inDays.toDouble();
-    double percent = daysSinceStart / totalBetweenEndAndStart;
+    double percent = daysSinceStart / totalBetweenEndAndStart * 100;
     return percent < 100 ? percent : 100;
   }
 }

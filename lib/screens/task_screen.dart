@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:activity_ring/activity_ring.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do/componenets/theme.dart';
 
 import '../providers/subtasks.dart';
 import '../widgets/subtask_list.dart';
@@ -69,23 +71,13 @@ class _TScreenState extends State<TScreen> {
     pTasks = percentTasks(completed, total);
     return Scaffold(
       appBar: AppBar(
-        title: Text(parentName),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: const Icon(Icons.exit_to_app),
-          //   onPressed: () {
-          //     Navigator.of(context).pushReplacementNamed('/');
-
-          //     Provider.of<Auth>(context, listen: false).logout();
-          //   },
-          // ),
-          IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditSubtaskScreen.routeName,
-                    arguments: {"id": null, "TaskId": parentId});
-              }),
-        ],
+        //title: Text(parentName),
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        //iconTheme: const IconThemeData(color: colorAccent),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       // //drawer: AppDrawer(),
       body: _isLoading
@@ -94,13 +86,76 @@ class _TScreenState extends State<TScreen> {
             )
           : Column(
               children: [
-                Text('PercentDays: ${pDays.toString()}'),
-                Text(total.toString()),
-                Text(completed.toString()),
-                Text('Percent Tasks: ${pTasks.toString()}'),
+                Container(
+                  //color: Colors.red,
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    top: MediaQuery.of(context).size.height * 0.02,
+                    //bottom: MediaQuery.of(context).size.height * 0.02
+                  ),
+                  child: Text(
+                    parentName,
+                    style: CusTextStyle(
+                        colorPrimary,
+                        MediaQuery.of(context).size.height * 0.05,
+                        FontWeight.bold),
+                  ),
+                  alignment: Alignment.topLeft,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      //color: Colors.red,
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.4,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Ring(
+                          percent: pTasks,
+                          color: RingColorScheme(ringColor: Colors.green),
+                          radius: 70,
+                          width: 10,
+                          child: Center(
+                              child: Text(
+                            'Tasks done\n$pTasks%',
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Ring(
+                        percent: pDays,
+                        color: RingColorScheme(ringColor: Colors.green),
+                        radius: 70,
+                        width: 10,
+                        child: Center(
+                            child: Text(
+                          'Days over\n$pDays%',
+                          textAlign: TextAlign.center,
+                        )),
+                      ),
+                    ),
+                  ],
+                ),
+                // Text('PercentDays: ${pDays.toString()}'),
+                // Text(total.toString()),
+                // Text(completed.toString()),
+                // Text('Percent Tasks: ${pTasks.toString()}'),
                 SubtaskList(_showOnlyIncomplete, parentId),
               ],
             ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'bottomRightAddTaskButton',
+        onPressed: () {
+          Navigator.of(context).pushNamed(EditSubtaskScreen.routeName,
+              arguments: {"id": null, "TaskId": parentId});
+        },
+        //backgroundColor: colorPrimary,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

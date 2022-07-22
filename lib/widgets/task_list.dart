@@ -21,7 +21,7 @@ class _TaskListState extends State<TaskList> {
     final tasks =
         widget.showIncomplete ? taskData.incompleteItems : taskData.items;
     return SizedBox(
-      height: 500,
+      height: MediaQuery.of(context).size.height * 0.7,
       child: ListView.builder(
         padding: const EdgeInsets.all(10.0),
         itemCount: tasks.length,

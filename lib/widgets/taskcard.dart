@@ -28,37 +28,43 @@ class TaskCard extends StatelessWidget {
     });
     final authData = Provider.of<Auth>(context, listen: false);
     return Container(
-      padding: const EdgeInsets.only(right: 20),
-      width: 200,
-      //height: 100,
+      //padding: const EdgeInsets.only(right: 20),
       child: Card(
-        child: Container(
-          padding: const EdgeInsets.all(15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Consumer<Tasks>(
-                builder: (ctx, tasks, _) => IconButton(
-                    onPressed: () {
-                      tasks.toggleCompletedStatus(task.id);
-                    },
-                    icon: task.isCompleted
-                        ? Icon(
-                            Icons.check_box,
-                            //size: 25,
-                          )
-                        : Icon(Icons.crop_square)),
-              ),
-              horizontalBox(20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(TScreen.routeName, arguments: {
-                    "Task": encode,
-                  });
-                },
-                child: Container(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed(TScreen.routeName, arguments: {
+              "Task": encode,
+            });
+          },
+          child: Container(
+            //padding: const EdgeInsets.all(15),
+            //padding:
+            //const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            height: MediaQuery.of(context).size.height * 0.075,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Consumer<Tasks>(
+                    builder: (ctx, tasks, _) => IconButton(
+                        onPressed: () {
+                          tasks.toggleCompletedStatus(task.id);
+                        },
+                        icon: task.isCompleted
+                            ? Icon(
+                                Icons.check_box,
+                                //size: 25,
+                              )
+                            : Icon(Icons.crop_square)),
+                  ),
+                ),
+                Container(),
+                Container(),
+                Container(),
+                Container(), Container(), Container(), Container(), Container(),
+                Container(
                   width: MediaQuery.of(context).size.width * 0.50,
+                  //color: Colors.black,
                   child: Text(
                     task.title,
                     style: const TextStyle(
@@ -68,29 +74,63 @@ class TaskCard extends StatelessWidget {
                         fontWeight: FontWeight.w500),
                   ),
                 ),
-              ),
-              // GestureDetector(
-              //     onTap: () {
-              //       print(timing);
-              //     },
-              //     child: Icon(
-              //       (() {
-              //         if (timing == 'any') {
-              //           return null;
-              //         }
-              //         if (timing == 'morning') {
-              //           return Icons.wb_sunny_outlined;
-              //         }
-              //         if (timing == 'evening') {
-              //           return Icons.cloud_circle_outlined;
-              //         }
-              //         if (timing == 'night') {
-              //           return Icons.mode_night_outlined;
-              //         }
-              //       }()),
-              //       color: colorAccent,
-              //     ))
-            ],
+                //),
+                Container(),
+                Container(),
+                Container(), Container(), Container(), Container(), Container(),
+                Container(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(EditTaskScreen.routeName,
+                          arguments: {"id": task.id});
+                    },
+                    icon: Icon(Icons.edit),
+                  ),
+                ),
+                Container(
+                  //alignment: Alignment.centerRight,
+                  child: IconButton(
+                      //alignment: Alignment.centerRight,
+                      onPressed: () async {
+                        try {
+                          await Provider.of<Tasks>(context, listen: false)
+                              .deleteTask(task.id);
+                        } catch (error) {
+                          scaffold.showSnackBar(SnackBar(
+                              content: Text(
+                            'Deleting failed!',
+                            textAlign: TextAlign.center,
+                          )));
+                        }
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      )),
+                )
+                // GestureDetector(
+                //     onTap: () {
+                //       print(timing);
+                //     },
+                //     child: Icon(
+                //       (() {
+                //         if (timing == 'any') {
+                //           return null;
+                //         }
+                //         if (timing == 'morning') {
+                //           return Icons.wb_sunny_outlined;
+                //         }
+                //         if (timing == 'evening') {
+                //           return Icons.cloud_circle_outlined;
+                //         }
+                //         if (timing == 'night') {
+                //           return Icons.mode_night_outlined;
+                //         }
+                //       }()),
+                //       color: colorAccent,
+                //     ))
+              ],
+            ),
           ),
         ),
       ),

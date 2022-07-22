@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks'),
+        //title: Text('Tasks'),
         iconTheme: const IconThemeData(color: colorAccent),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -109,10 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
           : Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.05,
+                      top: MediaQuery.of(context).size.height * 0.02,
+                      bottom: MediaQuery.of(context).size.height * 0.02),
                   child: Text(
                     "YOUR GOALS",
-                    style: CusTextStyle(colorPrimary, 38, FontWeight.bold),
+                    style: CusTextStyle(
+                        colorPrimary,
+                        MediaQuery.of(context).size.height * 0.05,
+                        FontWeight.bold),
                   ),
                   alignment: Alignment.topLeft,
                 ),
