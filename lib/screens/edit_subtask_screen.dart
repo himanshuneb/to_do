@@ -111,49 +111,90 @@ class _EditSubtaskScreenState extends State<EditSubtaskScreen> {
     //parentId = temp['TaskId'].toString();
     print('parentId: $parentId');
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Subtask'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _saveForm,
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   //title: Text(parentName),
+      //   iconTheme: IconThemeData(
+      //     color: Colors.black, //change your color here
+      //   ),
+      //   //iconTheme: const IconThemeData(color: colorAccent),
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      // ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _form,
-                child: ListView(
-                  children: <Widget>[
-                    TextFormField(
-                      initialValue: _initValues['title'],
-                      decoration: InputDecoration(labelText: 'Title'),
-                      textInputAction: TextInputAction.next,
-                      // onFieldSubmitted: (_) {
-                      //   FocusScope.of(context).requestFocus(_priceFocusNode);
-                      // },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please provide a value.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedTask = Subtask(
-                            title: value,
-                            id: _editedTask.id,
-                            isCompleted: _editedTask.isCompleted);
-                      },
+          : Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Form(
+                    key: _form,
+                    child: SizedBox(
+                      height: (MediaQuery.of(context).size.height * 0.4),
+                      child: ListView(
+                        children: <Widget>[
+                          Text(
+                            'Title',
+                            //textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: 'Halenoir',
+                                color: Colors.black,
+                                fontSize:
+                                    (MediaQuery.of(context).size.height * 0.05),
+                                fontWeight: FontWeight.w700),
+                          ),
+                          TextFormField(
+                            style: TextStyle(
+                                fontFamily: 'Halenoir',
+                                color: Colors.black,
+                                fontSize:
+                                    (MediaQuery.of(context).size.height * 0.05),
+                                fontWeight: FontWeight.w700),
+                            initialValue: _initValues['title'],
+                            decoration: InputDecoration(
+                                //labelText: 'Title',
+                                //border: InputBorder.none,
+                                hintText: "Enter title",
+                                hintStyle: TextStyle(
+                                    fontFamily: 'Halenoir',
+                                    color: Colors.black,
+                                    fontSize:
+                                        (MediaQuery.of(context).size.height *
+                                            0.05),
+                                    fontWeight: FontWeight.w700)),
+                            textInputAction: TextInputAction.next,
+                            // onFieldSubmitted: (_) {
+                            //   FocusScope.of(context).requestFocus(_priceFocusNode);
+                            // },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please provide a value.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _editedTask = Subtask(
+                                  title: value,
+                                  id: _editedTask.id,
+                                  isCompleted: _editedTask.isCompleted);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'bottomRightAddTaskButton',
+        onPressed: _saveForm,
+        //backgroundColor: colorPrimary,
+        child: const Icon(Icons.check),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:to_do/utilities/sizedbox.dart';
 
 import '/providers/task.dart';
 import '/providers/tasks.dart';
@@ -125,162 +126,214 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Task'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _saveForm,
-          ),
-        ],
-      ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
+          : Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Form(
                     key: _form,
-                    child: SizedBox(
-                      height: 200,
-                      child: ListView(
-                        children: <Widget>[
-                          TextFormField(
-                            initialValue: _initValues['title'],
-                            //controller: TextEditingController(
-                            //    text: _initValues['title']),
-                            decoration: InputDecoration(labelText: 'Title'),
-                            textInputAction: TextInputAction.next,
-                            // onFieldSubmitted: (_) {
-                            //   FocusScope.of(context).requestFocus(_priceFocusNode);
-                            // },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please provide a value.';
-                              }
-                              return null;
-                            },
-                            // onSaved: (value) {
-                            //   _editedTask = Task(
-                            //       title: value,
-                            //       startDate: DateTime.now(),
-                            //       endDate: DateTime.now().add(Duration(days: 5)),
-                            //       id: _editedTask.id,
-                            //       isCompleted: _editedTask.isCompleted);
-                            // },
-                            onSaved: (value) {
-                              controllerXD = value;
-                            },
+                    //height: (MediaQuery.of(context).size.height * 0.4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Title',
+                          //textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontFamily: 'Halenoir',
+                              color: Colors.black,
+                              fontSize:
+                                  (MediaQuery.of(context).size.height * 0.05),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        TextFormField(
+                          style: TextStyle(
+                              fontFamily: 'Halenoir',
+                              color: Colors.black,
+                              fontSize:
+                                  (MediaQuery.of(context).size.height * 0.035),
+                              fontWeight: FontWeight.w700),
+                          initialValue: _initValues['title'],
+                          decoration: InputDecoration(
+                              //labelText: 'Title',
+                              //border: InputBorder.none,
+                              hintText: "Enter title",
+                              hintStyle: TextStyle(
+                                  fontFamily: 'Halenoir',
+                                  color: Colors.black,
+                                  fontSize:
+                                      (MediaQuery.of(context).size.height *
+                                          0.035),
+                                  fontWeight: FontWeight.w700)),
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please provide a value.';
+                            }
+                            return null;
+                          },
+                          // onSaved: (value) {
+                          //   _editedTask = Task(
+                          //       title: value,
+                          //       startDate: DateTime.now(),
+                          //       endDate: DateTime.now().add(Duration(days: 5)),
+                          //       id: _editedTask.id,
+                          //       isCompleted: _editedTask.isCompleted);
+                          // },
+                          onSaved: (value) {
+                            controllerXD = value;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  verticalBox(15),
+                  Text(
+                    'Start Date',
+                    //textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontFamily: 'Halenoir',
+                        color: Colors.black,
+                        fontSize: (MediaQuery.of(context).size.height * 0.05),
+                        fontWeight: FontWeight.w700),
+                  ),
+                  //date?
+                  verticalBox(15),
+                  GestureDetector(
+                    child: Container(
+                      //color: Colors.red,
+                      height: 50,
+                      //margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     blurRadius: 2,
+                        //     color: Colors.grey.shade500,
+                        //   )
+                        // ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.calendar_today,
+                            //Icons.calendar_month_outlined,
+                            //color: backgroundColor,
+                            size: 30,
+                          ),
+                          horizontalBox(10),
+                          Text(
+                            DateFormat('dd-MM-yyyy').format(date1),
+                            style: TextStyle(
+                                fontFamily: 'Halenoir',
+                                color: Colors.black,
+                                fontSize: (MediaQuery.of(context).size.height *
+                                    0.035),
+                                fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
                     ),
+                    onTap: () async {
+                      DateTime newDate = await showDatePicker(
+                        context: context,
+                        initialDate: date1,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (newDate == null) {
+                        return;
+                      } else {
+                        setState(() {
+                          date1 = newDate;
+                        });
+                      }
+                    },
                   ),
-                ),
-                //date?
-                GestureDetector(
-                  child: Container(
-                    height: 50,
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      //color: primaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.grey.shade500,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          DateFormat('dd-MM-yyyy').format(date1),
-                          style: const TextStyle(
+                  verticalBox(15),
+                  Text(
+                    'End Date',
+                    //textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontFamily: 'Halenoir',
+                        color: Colors.black,
+                        fontSize: (MediaQuery.of(context).size.height * 0.05),
+                        fontWeight: FontWeight.w700),
+                  ),
+                  //date?
+                  verticalBox(15),
+                  GestureDetector(
+                    child: Container(
+                      //color: Colors.red,
+                      height: 50,
+                      //margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     blurRadius: 2,
+                        //     color: Colors.grey.shade500,
+                        //   )
+                        // ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.calendar_today,
+                            //Icons.calendar_month_outlined,
                             //color: backgroundColor,
-                            fontSize: 16,
+                            size: 30,
                           ),
-                        ),
-                        const Icon(
-                          Icons.calendar_today,
-                          //Icons.calendar_month_outlined,
-                          //color: backgroundColor,
-                          size: 30,
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () async {
-                    DateTime newDate = await showDatePicker(
-                      context: context,
-                      initialDate: date1,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (newDate == null) {
-                      return;
-                    } else {
-                      setState(() {
-                        date1 = newDate;
-                      });
-                    }
-                  },
-                ),
-                GestureDetector(
-                  child: Container(
-                    height: 50,
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      //color: primaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.grey.shade500,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          DateFormat('dd-MM-yyyy').format(date2),
-                          style: const TextStyle(
-                            //color: backgroundColor,
-                            fontSize: 16,
+                          horizontalBox(10),
+                          Text(
+                            DateFormat('dd-MM-yyyy').format(date2),
+                            style: TextStyle(
+                                fontFamily: 'Halenoir',
+                                color: Colors.black,
+                                fontSize: (MediaQuery.of(context).size.height *
+                                    0.035),
+                                fontWeight: FontWeight.w700),
                           ),
-                        ),
-                        const Icon(
-                          Icons.calendar_today,
-                          //Icons.calendar_month_outlined,
-                          //color: backgroundColor,
-                          size: 30,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    onTap: () async {
+                      DateTime newDate = await showDatePicker(
+                        context: context,
+                        initialDate: date2,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (newDate == null) {
+                        return;
+                      } else {
+                        setState(() {
+                          date2 = newDate;
+                        });
+                      }
+                    },
                   ),
-                  onTap: () async {
-                    DateTime newDate = await showDatePicker(
-                      context: context,
-                      initialDate: date2,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (newDate == null) {
-                      return;
-                    } else {
-                      setState(() {
-                        date2 = newDate;
-                      });
-                    }
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'bottomRightAddTaskButton',
+        onPressed: _saveForm,
+        //backgroundColor: colorPrimary,
+        child: const Icon(Icons.check),
+      ),
     );
   }
 }
